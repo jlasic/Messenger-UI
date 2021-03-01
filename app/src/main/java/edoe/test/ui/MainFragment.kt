@@ -1,4 +1,4 @@
-package edoe.test
+package edoe.test.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -7,12 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import edoe.test.MainViewModel
+import edoe.test.R
 import edoe.test.databinding.MainFragmentBinding
+import edoe.test.dpToPx
+
 
 class MainFragment : Fragment() {
 
@@ -37,7 +42,7 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         with(binding) {
-            toolbarBack.setOnClickListener { }
+            toolbarBack.setOnClickListener { activity?.onBackPressed() }
             toolbarVideoCall.setOnClickListener { }
             toolbarAudioCall.setOnClickListener { }
             toolbarMore.setOnClickListener { }
@@ -54,8 +59,23 @@ class MainFragment : Fragment() {
         Glide.with(requireContext())
             .load(R.drawable.avatar_strange).transform(RoundedCorners(20f.dpToPx()))
             .into(binding.toolbarAvatar)
-    }
 
+        val messagesAdapter = MessagesAdapter()
+        binding.rvMessages.adapter = messagesAdapter
+        binding.rvMessages.layoutManager = LinearLayoutManager(context)
+        viewModel.messagesLD.observe(viewLifecycleOwner) {
+            messagesAdapter.messages = it
+            binding.rvMessages.smoothScrollToPosition(messagesAdapter.itemCount)
+        }
+
+
+        // keyboard opened
+        binding.rvMessages.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                binding.rvMessages.post { binding.rvMessages.smoothScrollToPosition(messagesAdapter.itemCount) }
+            }
+        }
+    }
 
     private fun EditText.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

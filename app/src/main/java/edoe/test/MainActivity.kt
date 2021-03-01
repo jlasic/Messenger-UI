@@ -2,6 +2,7 @@ package edoe.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import edoe.test.ui.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
