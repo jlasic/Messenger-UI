@@ -1,8 +1,13 @@
 package edoe.test
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import edoe.test.models.Message
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
     val messagesLD: MutableLiveData<List<Message>> = MutableLiveData(
@@ -19,4 +24,17 @@ class MainViewModel : ViewModel() {
             Message(9, "Mr. Stark.", "07:40 PM", Message.Source.OTHER)
         )
     )
+
+    private val statusLD: MutableLiveData<Boolean> = MutableLiveData()
+
+    fun start(): LiveData<Boolean> {
+        viewModelScope.launch(Dispatchers.IO) {
+            repeat(100) {
+                delay(3000)
+                statusLD.postValue(statusLD.value?.not() ?: false)
+            }
+        }
+
+        return statusLD
+    }
 }

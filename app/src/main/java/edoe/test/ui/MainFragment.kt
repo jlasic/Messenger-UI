@@ -68,11 +68,18 @@ class MainFragment : Fragment() {
             binding.rvMessages.smoothScrollToPosition(messagesAdapter.itemCount)
         }
 
-
         // keyboard opened
         binding.rvMessages.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
                 binding.rvMessages.post { binding.rvMessages.smoothScrollToPosition(messagesAdapter.itemCount) }
+            }
+        }
+
+        viewModel.start().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.tvStatus.setText("Active now")
+            } else {
+                binding.tvStatus.setText("is typing...")
             }
         }
     }
