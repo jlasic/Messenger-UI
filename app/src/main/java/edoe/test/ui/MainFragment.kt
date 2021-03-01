@@ -63,6 +63,7 @@ class MainFragment : Fragment() {
         val messagesAdapter = MessagesAdapter()
         binding.rvMessages.adapter = messagesAdapter
         binding.rvMessages.layoutManager = LinearLayoutManager(context)
+        binding.rvMessages.addItemDecoration(MessageDecorator())
         viewModel.messagesLD.observe(viewLifecycleOwner) {
             messagesAdapter.messages = it
             binding.rvMessages.smoothScrollToPosition(messagesAdapter.itemCount)
