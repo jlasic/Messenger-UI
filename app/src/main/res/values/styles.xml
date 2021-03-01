@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ToolbarContact">
+        <item name="android:textColor">@color/edoe_blue</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ToolbarStatus">
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="ToolbarStatus.Typing">
+        <item name="android:textColor">@color/edoe_blue</item>
+    </style>
+
+</resources>
